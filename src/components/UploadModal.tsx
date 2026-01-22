@@ -1,21 +1,21 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { X, UploadCloud, File as FileIcon } from 'lucide-react';
+// REMOVED 'File as FileIcon' from this line below:
+import { X, UploadCloud } from 'lucide-react';
 import { api } from '../api';
 import toast from 'react-hot-toast';
 
 interface UploadModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onUploadSuccess: () => void; // Function to refresh the list
+  onUploadSuccess: () => void;
 }
 
 export default function UploadModal({ isOpen, onClose, onUploadSuccess }: UploadModalProps) {
   const [uploading, setUploading] = useState(false);
 
-  // Function called when file is dropped
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const file = acceptedFiles[0]; // For MVP, we handle 1 file at a time
+    const file = acceptedFiles[0];
     if (!file) return;
 
     setUploading(true);
@@ -28,8 +28,8 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }: Upload
       });
       
       toast.success('File uploaded successfully!');
-      onUploadSuccess(); // Refresh the dashboard list
-      onClose(); // Close modal
+      onUploadSuccess();
+      onClose();
     } catch (error) {
       toast.error('Upload failed. Please try again.');
     } finally {
@@ -45,14 +45,12 @@ export default function UploadModal({ isOpen, onClose, onUploadSuccess }: Upload
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 relative animate-in fade-in zoom-in duration-200">
         
-        {/* Close Button */}
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-dark">
           <X size={24} />
         </button>
 
         <h2 className="text-xl font-bold mb-4 text-dark">Upload File</h2>
 
-        {/* Drop Zone Area */}
         <div 
           {...getRootProps()} 
           className={`border-2 border-dashed rounded-xl h-64 flex flex-col items-center justify-center cursor-pointer transition
