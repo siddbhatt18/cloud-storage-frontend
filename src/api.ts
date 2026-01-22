@@ -1,0 +1,21 @@
+import axios from 'axios';
+
+// AUTOMATIC URL SWITCHING:
+// 1. If we are on Vercel (Production), it uses the VITE_API_URL variable you set.
+// 2. If we are on your laptop (Development), it falls back to 'http://localhost:5000/api'.
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+export const api = axios.create({
+  baseURL: API_URL,
+});
+
+// Add a request interceptor to include the JWT token in every request
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export default api;
